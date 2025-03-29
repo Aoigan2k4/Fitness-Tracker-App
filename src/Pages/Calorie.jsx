@@ -76,6 +76,9 @@ function CalorieBurnGoal({ userWeight, userWeightGoal, userDuration, userMeasure
       <button onClick={() => navigate("/workout-plan")} style={{ marginTop: "20px", padding: "10px 20px", fontSize: "16px" }}>
         Plan Your Workout
       </button>
+      <button onClick={() => navigate("/schedule-management")} style={{ marginTop: "20px", padding: "10px 20px", fontSize: "16px" }}>
+        Plan Your Schedule
+      </button>
     </div>
   );
 }

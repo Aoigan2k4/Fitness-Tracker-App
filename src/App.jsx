@@ -6,6 +6,7 @@ import UserInfo from "./Pages/UserInfo";
 import Calorie from "./Pages/Calorie";
 import WorkoutPlan from "./Pages/WorkoutPlan";
 import MapPage from './Pages/MapPage';
+import ScheduleManagementPage from './Pages/ScheduleManagementPage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/calorie" element={<Calorie />} />
           <Route path="/workout-plan" element={<WorkoutPlan />} />
           <Route path="/map" element={<MapPage />} />
+          <Route path="/schedule-management" element={<ScheduleManagementPage />} />
       </Routes>
   </Router>
   );
