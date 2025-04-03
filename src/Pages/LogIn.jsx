@@ -32,6 +32,7 @@ function LogIn() {
         console.error('Error logginng in: ', error);
     }
   };
+  
     function isVisible() {
         var x = document.getElementById("password");
         if (x.type === "password") {
@@ -40,6 +41,7 @@ function LogIn() {
             x.type = "password";
         }
     }
+
   return (
       <form onSubmit={handleLogIn}>
             <h1>Log In</h1>
