@@ -1,6 +1,10 @@
 /* global google */
 import React, { useState, useRef } from 'react';
 import { FaLocationArrow, FaTimes } from 'react-icons/fa';
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import User from '../Models/User';
+import { useLocation } from "react-router-dom";
 import {
   useJsApiLoader,
   GoogleMap,
@@ -8,6 +12,7 @@ import {
   Autocomplete,
   DirectionsRenderer,
 } from '@react-google-maps/api';
+
 
 const center = { lat: 45.43755, lng: -73.6035 };
 
@@ -17,11 +22,14 @@ function MapPage() {
     libraries: ['places', 'localContext'],
   });
 
+  const location = useLocation();
   const [map, setMap] = useState(null);
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
   const [places, setPlaces] = useState([]);
+  const { exerciseType } = location.state || {}; 
+
 
   const originRef = useRef();
   const destinationRef = useRef();
@@ -171,6 +179,58 @@ function MapPage() {
     setMarkers([]);
   }
 
+  async function caloriesBurned() {
+    const username = sessionStorage.getItem("username");
+    const info = await User.getUserData(username)
+    const userRef = doc(db, "Users", info.userID);
+
+    try {
+      if(!duration) { return }
+
+        let MET = 0.0
+        if (exerciseType === "walk"){
+          MET = 3.8
+        }
+        else if(exerciseType === "run") {
+          MET = 7.5
+        }
+        if (duration.includes("hours")) {
+          const time = duration.split(" ");
+          const hour = parseInt(time[0]) * 60;
+          const min = parseInt(time[2]) + hour; // Keep this as a number
+          console.log(min);
+          console.log(hour);
+        
+          const caloriesBurned = (MET * 3.5 * parseFloat(info.weight)) / 200 * min; // Use `min` here
+          const calToBurn = (parseFloat(info.dailyCalorieBurn) - caloriesBurned).toFixed(2);
+        
+          console.log(parseFloat(info.dailyCalorieBurn));
+          console.log(caloriesBurned);
+          console.log(calToBurn);
+        
+          await updateDoc(userRef, {
+            dailyCalorieBurn: calToBurn.toString(),
+          });
+          console.log("Your stats have been updated");
+        }
+        else {
+          const caloriesBurned = (MET * 3.5 * parseFloat(info.weight)) / 200 * parseFloat(duration);
+          const calToBurn = (parseFloat(info.dailyCalorieBurn) - caloriesBurned).toFixed(2);
+          console.log("Duration:", duration);
+          console.log(parseFloat(info.dailyCalorieBurn))
+          console.log(caloriesBurned)
+          console.log(calToBurn)
+          await updateDoc(userRef, {
+            dailyCalorieBurn: calToBurn.toString(), 
+          });
+          console.log("Your stats has been updated!");
+        }
+    }
+    catch (error){
+      console.error("Error updating calories:", error);
+    }
+  }
+
   return (
     <div style={{ position: 'relative', height: '100vh', width: '100vw' }}>
       <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: '100%' }}>
@@ -220,6 +280,9 @@ function MapPage() {
             <button onClick={findPlaces} style={{ padding: '8px 16px', backgroundColor: 'blue', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
               Find Places
             </button>
+            <button onClick={caloriesBurned} style={{ padding: '8px 16px', backgroundColor: '#FF851B', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+              Finish Session
+            </button>
             <button onClick={clearRoute} style={{ padding: '8px', backgroundColor: 'red', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
               <FaTimes />
             </button>
@@ -227,8 +290,8 @@ function MapPage() {
         </div>
 
         <div style={{ display: 'flex', gap: '16px', marginTop: '16px', justifyContent: 'space-between', color: 'gray' }}>
-          <span>Distance: {distance}</span>
-          <span>Duration: {duration}</span>
+          <span>Distance: {distance} </span>
+          <span>Duration: {duration} </span>
           <button onClick={() => map.panTo(center)} style={{ padding: '8px', backgroundColor: 'green', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
             <FaLocationArrow />
           </button>

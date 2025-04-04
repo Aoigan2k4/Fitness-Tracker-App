@@ -18,7 +18,6 @@ function LogIn() {
                 alert("Password does not match!");
             }
             else {
-                alert("Logged in successfully!");
                 sessionStorage.setItem('username', username);
                 navigate("/info");
             }

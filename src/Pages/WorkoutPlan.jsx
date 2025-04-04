@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import User from '../Models/User';
 
 function WorkoutPlan() {
   const navigate = useNavigate();
   const location = useLocation();
-  const dailyCalorieBurn = location.state?.dailyCalorieBurn || null; // Ensure it's retrieved safely
 
+  const [dailyCalorieBurn, setDailyCalorieBurn] = useState(null);
   const [exerciseType, setExerciseType] = useState("");
   const [timeNeeded, setTimeNeeded] = useState(null);
+
+  const getDailyCalorieBurn = async () => {
+    const username = sessionStorage.getItem("username");
+    const info = await User.getUserData(username)
+    setDailyCalorieBurn(info.dailyCalorieBurn) || null; // Ensure it's retrieved safely
+  }
 
   const MET_VALUES = {
     walk: 3.8, // Walking at moderate speed
@@ -15,9 +22,16 @@ function WorkoutPlan() {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      await getDailyCalorieBurn();
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     if (exerciseType && dailyCalorieBurn) {
       calculateTimeNeeded();
-    }
+    }   
   }, [exerciseType, dailyCalorieBurn]);
 
   const calculateTimeNeeded = () => {
@@ -52,7 +66,7 @@ function WorkoutPlan() {
 
       {timeNeeded !== null && <h2>You need to {exerciseType} for approximately {timeNeeded} minutes.</h2>}
 
-      <button onClick={() => navigate("/map")}>Prepare your route</button>
+      <button onClick={() => navigate("/map", { state: { exerciseType } })}>Prepare your route</button>
       
     </div>
   );

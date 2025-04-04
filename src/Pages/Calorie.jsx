@@ -36,6 +36,7 @@ function CalorieBurnGoal({ userWeight, userWeightGoal, userDuration, userMeasure
       totalCaloriesNeeded = (userWeight - userWeightGoal) * 3500;
     }
 
+    
     const dailyCalorieBurn = (totalCaloriesNeeded / durationDays).toFixed(2);
     console.log("Total Calories Needed:", totalCaloriesNeeded);
     console.log("Daily Calorie Burn:", dailyCalorieBurn);
@@ -47,13 +48,22 @@ function CalorieBurnGoal({ userWeight, userWeightGoal, userDuration, userMeasure
         const username = sessionStorage.getItem("username");
         if (!username) throw new Error("User not found in sessionStorage");
 
-        const user = await User.getUserByName(username);
+        const user = await User.getUserData(username);
         if (!user) throw new Error("User not found in Firestore");
 
-        const userRef = doc(db, "Users", user.userID);
-        await updateDoc(userRef, { dailyCalorieBurn });
+        console.log(user.dailyCalorieBurn)  
 
-        console.log("Successfully updated Firestore with calorie burn data.");
+        if(!user.dailyCalorieBurn) {
+          const userRef = doc(db, "Users", user.userID);
+          console.log(user.dailyCalorieBurn)  
+          await updateDoc(userRef, { dailyCalorieBurn });        
+          console.log("Successfully updated Firestore with calorie burn data.");
+        }
+        else {
+          setCaloriesToBurn(user.dailyCalorieBurn)
+        }
+
+
       } catch (error) {
         console.error("Error updating Firestore:", error);
       }

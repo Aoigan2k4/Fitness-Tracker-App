@@ -1,5 +1,5 @@
 import { db } from "../firebase"
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
 
 class User {
     #weight;
@@ -35,7 +35,14 @@ class User {
         else {
           return null;
         }
-        
+    }
+
+    static async getUserData(username){
+      const user = await User.getUserByName(username);
+      const userRef = doc(db, "Users", user.userID);
+      const dataSnap = await getDoc(userRef)
+      const info = dataSnap.data()
+      return info
     }
 }
 
