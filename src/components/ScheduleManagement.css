@@ -1,124 +1,50 @@
-/* General Styles */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f9;
-    margin: 0;
-    padding: 0;
-    color: #333;
-  }
-  
-  .schedule-management {
-    max-width: 800px;
+.weekly-schedule {
+    max-width: 900px;
     margin: 40px auto;
     padding: 20px;
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
   }
   
   h1 {
-    text-align: center;
     color: #2c3e50;
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+    font-size: 2rem;
   }
   
-  h2 {
-    color: #34495e;
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-  }
-  
-  /* Input Section */
-  .input-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin-bottom: 30px;
-  }
-  
-  .input-section label {
-    display: flex;
-    flex-direction: column;
-    font-size: 1rem;
-    color: #555;
-  }
-  
-  .input-section input,
-  .input-section select {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    margin-top: 5px;
-    background-color: #f9f9f9;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .input-section input:focus,
-  .input-section select:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
-    outline: none;
-  }
-  
-  /* Schedule Grid */
-  .schedule-grid {
+  .schedule-table table {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 20px;
   }
   
-  .time-slot {
-    padding: 15px;
-    background: linear-gradient(135deg, #3498db, #2980b9);
-    color: white;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .time-slot:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .time-slot p {
-    margin: 0;
-    font-size: 1.1rem;
-  }
-  
-  /* Recommendation Section */
-  .recommendation {
-    margin-top: 30px;
-    padding: 20px;
-    background: #ecf0f1;
-    border-radius: 8px;
+  .schedule-table th, .schedule-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
     text-align: center;
   }
   
-  .recommendation h2 {
-    color: #2c3e50;
-    margin-bottom: 10px;
+  .schedule-table th {
+    background: #2c3e50;
+    color: white;
   }
   
-  .recommendation p {
-    font-size: 1.2rem;
-    color: #27ae60;
+  .schedule-table input {
+    border: none;
+    text-align: center;
+    font-size: 1rem;
+    padding: 5px;
+  }
+  
+  .workout-goal select {
+    padding: 8px;
+    margin: 10px 0;
+    font-size: 1rem;
+  }
+  
+  .workout-recommendation {
     font-weight: bold;
-    margin: 0;
+    color: #27ae60;
   }
   
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .input-section {
-      grid-template-columns: 1fr;
-    }
-  
-    h1 {
-      font-size: 2rem;
-    }
-  
-    h2 {
-      font-size: 1.5rem;
-    }
-  }
