@@ -1,51 +1,58 @@
-import React, { useState } from 'react';
-import './ScheduleManagement.css';
+import React, { useState } from "react";
+import "./WeeklySchedule.css";
 
-const ScheduleManagement = () => {
-  const [sleepTime, setSleepTime] = useState('22:00');
-  const [wakeUpTime, setWakeUpTime] = useState('06:00');
-  const [workStartTime, setWorkStartTime] = useState('09:00');
-  const [workEndTime, setWorkEndTime] = useState('17:00');
-  const [workoutGoal, setWorkoutGoal] = useState('strength');
+const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-  const calculateFreeTime = () => {
+const WeeklySchedule = () => {
+  const [schedule, setSchedule] = useState(
+    daysOfWeek.reduce((acc, day) => {
+      acc[day] = { sleepTime: "22:00", wakeUpTime: "06:00", workStart: "09:00", workEnd: "17:00" };
+      return acc;
+    }, {})
+  );
+
+  const [workoutGoal, setWorkoutGoal] = useState("strength");
+
+  const convertTimeToMinutes = (time) => {
+    const [hours, minutes] = time.split(":").map(Number);
+    return hours * 60 + minutes;
+  };
+
+  const convertMinutesToTime = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}`;
+  };
+
+  const calculateFreeTime = (day) => {
+    const { sleepTime, wakeUpTime, workStart, workEnd } = schedule[day];
+
     const sleep = convertTimeToMinutes(sleepTime);
     const wakeUp = convertTimeToMinutes(wakeUpTime);
-    const workStart = convertTimeToMinutes(workStartTime);
-    const workEnd = convertTimeToMinutes(workEndTime);
+    const workStartTime = convertTimeToMinutes(workStart);
+    const workEndTime = convertTimeToMinutes(workEnd);
 
-    const freeTimeSlots: { start: number; end: number; type: string }[] = [];
+    let freeTimeSlots = [];
 
-    if (wakeUp < workStart) {
-      freeTimeSlots.push({ start: wakeUp, end: workStart, type: 'morning' });
+    if (wakeUp < workStartTime) {
+      freeTimeSlots.push({ start: wakeUp, end: workStartTime, type: "morning" });
     }
 
-    if (workEnd < sleep) {
-      freeTimeSlots.push({ start: workEnd, end: sleep, type: 'evening' });
+    if (workEndTime < sleep) {
+      freeTimeSlots.push({ start: workEndTime, end: sleep, type: "evening" });
     }
 
     return freeTimeSlots;
   };
 
-  const convertTimeToMinutes = (time: string) => {
-    const [hours, minutes] = time.split(':').map(Number);
-    return hours * 60 + minutes;
-  };
-
-  const convertMinutesToTime = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
-  };
-
-  const recommendWorkoutTime = (freeTimeSlots: { start: number; end: number; type: string }[]) => {
-    if (freeTimeSlots.length === 0) return 'There is no free time available for training.';
+  const recommendWorkoutTime = (freeTimeSlots) => {
+    if (freeTimeSlots.length === 0) return "No available workout time.";
 
     let recommendedSlot;
-    if (workoutGoal === 'strength') {
-      recommendedSlot = freeTimeSlots.find((slot) => slot.type === 'morning' && (slot.end - slot.start) >= 60);
-    } else if (workoutGoal === 'cardio') {
-      recommendedSlot = freeTimeSlots.find((slot) => slot.type === 'evening' && (slot.end - slot.start) >= 60);
+    if (workoutGoal === "strength") {
+      recommendedSlot = freeTimeSlots.find((slot) => slot.type === "morning" && (slot.end - slot.start) >= 60);
+    } else if (workoutGoal === "cardio") {
+      recommendedSlot = freeTimeSlots.find((slot) => slot.type === "evening" && (slot.end - slot.start) >= 60);
     } else {
       recommendedSlot = freeTimeSlots.find((slot) => (slot.end - slot.start) >= 30);
     }
@@ -53,35 +60,16 @@ const ScheduleManagement = () => {
     if (recommendedSlot) {
       const startTime = convertMinutesToTime(recommendedSlot.start);
       const endTime = convertMinutesToTime(recommendedSlot.start + 60);
-      return `Recommended training schedule: ${startTime} - ${endTime}`;
+      return `Workout Time: ${startTime} - ${endTime}`;
     } else {
-      return 'There is not enough free time to train.';
+      return "Not enough free time for a workout.";
     }
   };
 
-  const freeTimeSlots = calculateFreeTime();
-  const recommendation = recommendWorkoutTime(freeTimeSlots);
-
   return (
-    <div className="schedule-management">
-      <h1>Schedule/Sleep Management</h1>
-      <div className="input-section">
-        <label>
-          Bedtime:
-          <input type="time" value={sleepTime} onChange={(e) => setSleepTime(e.target.value)} />
-        </label>
-        <label>
-          Wake-up Time:
-          <input type="time" value={wakeUpTime} onChange={(e) => setWakeUpTime(e.target.value)} />
-        </label>
-        <label>
-          Work Start Time:
-          <input type="time" value={workStartTime} onChange={(e) => setWorkStartTime(e.target.value)} />
-        </label>
-        <label>
-          Work End Time:
-          <input type="time" value={workEndTime} onChange={(e) => setWorkEndTime(e.target.value)} />
-        </label>
+    <div className="weekly-schedule">
+      <h1>Weekly Schedule Management</h1>
+      <div className="workout-goal">
         <label>
           Workout Goal:
           <select value={workoutGoal} onChange={(e) => setWorkoutGoal(e.target.value)}>
@@ -91,21 +79,67 @@ const ScheduleManagement = () => {
           </select>
         </label>
       </div>
-      <div className="schedule-grid">
-        <h2>Free Time Slots</h2>
-        {freeTimeSlots.length > 0 ? (
-          freeTimeSlots.map((slot, index) => (
-            <div key={index} className="time-slot">
-              {`${convertMinutesToTime(slot.start)} - ${convertMinutesToTime(slot.end)}`}
-            </div>
-          ))
-        ) : (
-          <p>No free time slots available.</p>
-        )}
-      </div>
-      <div className="recommendation">
-        <h2>Recommendation</h2>
-        <p>{recommendation}</p>
+      <div className="schedule-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Day</th>
+              <th>Wake-up</th>
+              <th>Work Start</th>
+              <th>Work End</th>
+              <th>Bedtime</th>
+              <th>Workout Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {daysOfWeek.map((day) => {
+              const freeTimeSlots = calculateFreeTime(day);
+              const recommendation = recommendWorkoutTime(freeTimeSlots);
+              return (
+                <tr key={day}>
+                  <td>{day}</td>
+                  <td>
+                    <input
+                      type="time"
+                      value={schedule[day].wakeUpTime}
+                      onChange={(e) =>
+                        setSchedule({ ...schedule, [day]: { ...schedule[day], wakeUpTime: e.target.value } })
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="time"
+                      value={schedule[day].workStart}
+                      onChange={(e) =>
+                        setSchedule({ ...schedule, [day]: { ...schedule[day], workStart: e.target.value } })
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="time"
+                      value={schedule[day].workEnd}
+                      onChange={(e) =>
+                        setSchedule({ ...schedule, [day]: { ...schedule[day], workEnd: e.target.value } })
+                      }
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="time"
+                      value={schedule[day].sleepTime}
+                      onChange={(e) =>
+                        setSchedule({ ...schedule, [day]: { ...schedule[day], sleepTime: e.target.value } })
+                      }
+                    />
+                  </td>
+                  <td className="workout-recommendation">{recommendation}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );
