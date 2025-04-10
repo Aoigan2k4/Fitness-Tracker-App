@@ -4,7 +4,7 @@ import { FaLocationArrow, FaTimes } from 'react-icons/fa';
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import User from '../Models/User';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   useJsApiLoader,
   GoogleMap,
@@ -23,6 +23,7 @@ function MapPage() {
   });
 
   const location = useLocation();
+  const navigate = useNavigate();
   const [map, setMap] = useState(null);
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState('');
@@ -194,6 +195,7 @@ function MapPage() {
         else if(exerciseType === "run") {
           MET = 7.5
         }
+        
         if (duration.includes("hours")) {
           const time = duration.split(" ");
           const hour = parseInt(time[0]) * 60;
@@ -202,27 +204,38 @@ function MapPage() {
           console.log(hour);
         
           const caloriesBurned = (MET * 3.5 * parseFloat(info.weight)) / 200 * min; // Use `min` here
-          const calToBurn = (parseFloat(info.dailyCalorieBurn) - caloriesBurned).toFixed(2);
+          let calToBurn = (parseFloat(info.dailyCalorieBurn) - caloriesBurned).toFixed(2);
         
           console.log(parseFloat(info.dailyCalorieBurn));
           console.log(caloriesBurned);
           console.log(calToBurn);
         
+          if (calToBurn < 0) {
+            calToBurn = 0; // Prevent negative calorie burn
+          }
+
           await updateDoc(userRef, {
             dailyCalorieBurn: calToBurn.toString(),
           });
+          navigate("/info");
           console.log("Your stats have been updated");
         }
         else {
           const caloriesBurned = (MET * 3.5 * parseFloat(info.weight)) / 200 * parseFloat(duration);
-          const calToBurn = (parseFloat(info.dailyCalorieBurn) - caloriesBurned).toFixed(2);
+          let calToBurn = (parseFloat(info.dailyCalorieBurn) - caloriesBurned).toFixed(2);
           console.log("Duration:", duration);
           console.log(parseFloat(info.dailyCalorieBurn))
           console.log(caloriesBurned)
           console.log(calToBurn)
+
+          if (calToBurn < 0) {
+            calToBurn = 0; // Prevent negative calorie burn
+          }
+          
           await updateDoc(userRef, {
             dailyCalorieBurn: calToBurn.toString(), 
           });
+          navigate("/info");
           console.log("Your stats has been updated!");
         }
     }
@@ -270,7 +283,7 @@ function MapPage() {
           <input type="number" placeholder="Minutes" ref={travelTimeRef} style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', width: '80px' }} />
 
           <Autocomplete>
-            <input type="text" placeholder="Destination (optional)" ref={destinationRef} style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }} />
+            <input type="text" placeholder="Destination" ref={destinationRef} style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }} />
           </Autocomplete>
 
           <div style={{ display: 'flex', gap: '8px' }}>
