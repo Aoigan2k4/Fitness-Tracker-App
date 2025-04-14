@@ -279,7 +279,7 @@ function MapPage() {
             body: JSON.stringify({ username, dailyCalorieBurn }),
           });
   
-          if (response.ok) {+
+          if (response.ok) {
               alert("Calories burned updated successfully!");
           } else {
               const data = await response.json();
