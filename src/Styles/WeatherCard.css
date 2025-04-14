@@ -1,0 +1,15 @@
+.weather-card {
+    background: #ffffffdd;
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    font-size: 0.9rem;
+    color: #333;
+    animation: glow 5s ease-in-out infinite alternate;
+  }
+  
+  @keyframes glow {
+    0% { box-shadow: 0 0 6px rgba(255, 195, 230, 0.5); }
+    100% { box-shadow: 0 0 16px rgba(255, 195, 230, 0.8); }
+  }
+  

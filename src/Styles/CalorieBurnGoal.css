@@ -1,0 +1,91 @@
+/* === Fullscreen Gradient Background === */
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #ffe0f3, #e6e0ff, #d5f0ff);
+    background-size: 300% 300%;
+    animation: gradientShift 15s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* === Calorie Content Card === */
+  .calorie-content {
+    background-color: rgba(255, 255, 255, 0.97);
+    padding: 60px 80px;  /* 👈 Bigger padding */
+    border-radius: 24px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    width: 90%;
+    max-width: 640px;    /* 👈 Wider card */
+    text-align: center;
+    animation: fadeIn 0.6s ease-in-out;
+  }
+  
+  /* === Top Icon === */
+  .calorie-top-image {
+    width: 120px;
+    height: auto;
+    margin-bottom: 30px;
+  }
+  
+  /* === Headings and Text === */
+  .calorie-content h1 {
+    font-size: 2.4rem;
+    margin-bottom: 14px;
+    color: #2c2c2c;
+  }
+  
+  .calorie-content h2 {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: #444;
+  }
+  
+  .calorie-content p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  /* === Buttons === */
+  .calorie-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+  }
+  
+  .calorie-buttons button {
+    padding: 12px 26px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    background-color: #ff98c9;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.25s, transform 0.2s;
+  }
+  
+  .calorie-buttons button:hover {
+    background-color: #ff77bb;
+    transform: translateY(-2px);
+  }
+  
+  /* === Fade-in Animation === */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  

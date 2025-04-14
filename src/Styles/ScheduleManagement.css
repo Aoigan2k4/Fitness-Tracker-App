@@ -1,0 +1,181 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* === 全局背景和字体设置 === */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #ffe0f3, #e6e0ff, #d5f0ff);
+  background-size: 300% 300%;
+  animation: gradientShift 15s ease infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* === 主容器 === */
+.schedule-page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === 卡片样式 === */
+.schedule-management-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 50px 60px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 50px;
+  max-width: 1400px; /* 👈 加宽一点 */
+  width: 100%;
+  align-items: flex-start;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === 左侧图标 === */
+.schedule-icon {
+  width: 100px;
+  height: 100px;
+  background-image: url('../Assets/Schedule.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0 auto 20px auto;
+}
+
+.left-section {
+  flex: 1;
+}
+
+/* === 标题样式 === */
+.left-section h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  color: #2d1b53;
+  margin-bottom: 30px;
+}
+
+/* === 输入框布局 === */
+.input-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 0 10px;
+}
+
+.input-section label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.input-section input,
+.input-section select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 1rem;
+  margin-top: 5px;
+  background-color: #f9f9f9;
+  transition: 0.3s;
+}
+
+.input-section input:focus,
+.input-section select:focus {
+  border-color: #d083ff;
+  box-shadow: 0 0 0 2px rgba(208, 131, 255, 0.2);
+  outline: none;
+}
+
+/* === 右侧样式 === */
+.right-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: 120px;
+}
+
+.right-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #7c3aed;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.time-slot {
+  background: linear-gradient(to right, #ff88bb, #ffa4d3);
+  padding: 12px 24px;
+  border-radius: 16px;
+  margin: 10px auto;
+  color: white;
+  text-align: center;
+  font-weight: 600;
+  width: fit-content;
+  box-shadow: 0 5px 12px rgba(255, 100, 180, 0.3);
+}
+
+.recommendation {
+  background: #ffeafd;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 30px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.recommendation h3 {
+  color: #b832e6;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.recommendation p {
+  font-size: 1rem;
+  color: #2ecc71;
+  font-weight: 600;
+}
+
+/* === 响应式布局 === */
+@media (max-width: 900px) {
+  .schedule-management-card {
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 30px;
+  }
+
+  .right-section {
+    margin-top: 30px;
+  }
+
+  .input-section {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-icon {
+    width: 70px;
+    height: 70px;
+  }
+}

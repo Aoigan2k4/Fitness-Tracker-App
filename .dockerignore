@@ -1,0 +1,28 @@
+# Ignore node_modules (dependencies will be installed in the container)
+node_modules
+
+# Ignore logs
+logs
+*.log
+
+# Ignore build output
+dist
+dist-ssr
+
+# Ignore environment files
+*.env
+*.local
+
+# Ignore editor-specific files
+.vscode
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Ignore Git-related files
+.git
+.gitignore
